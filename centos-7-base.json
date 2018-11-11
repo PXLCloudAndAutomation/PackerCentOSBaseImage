@@ -1,0 +1,133 @@
+{
+    "builders": 
+    [
+        {
+            "name": "centos-7-vmware-base",
+            "type": "vmware-iso",
+            "headless": true,
+            "vnc_disable_password": true,
+            "keep_registered": "false",
+
+            "vm_name": "centos-7-base",
+            "guest_os_type": "centos-64",
+            "tools_upload_flavor": "linux",
+
+            "disk_type_id": "0",
+            "disk_size": "50000",
+
+            "http_directory": "http",
+            "iso_urls": 
+            [
+                "iso/CentOS-7-x86_64-Minimal-1804.iso",
+                "http://mirror.unix-solutions.be/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso"
+            ],
+            "iso_checksum_type": "sha256",
+            "iso_checksum": "714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd",
+
+            "boot_wait": "10s",
+            "boot_command": 
+            [
+                "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+            ],
+
+            "ssh_username": "user",
+            "ssh_password": "user",
+            "ssh_port": 22,
+            "ssh_wait_timeout": "10000s",
+            "shutdown_command": "echo 'user'|sudo -S /sbin/halt -h -p",
+            
+            "vmx_data": 
+            {
+                "cpuid.coresPerSocket": "1",
+                "memsize": "2048",
+                "numvcpus": "2"
+            },
+
+            "output_directory": "vmware"
+        },
+        
+          
+        {
+            "name": "centos-7-docker-base",
+            "type": "docker",
+            "image": "centos:7",
+            "export_path": "centos-7-docker-base.tar"
+        },
+
+        {
+            "name": "centos-7-virtualbox-base",
+            "type": "virtualbox-iso",
+            "headless": true,
+
+            "vm_name": "centos-7-base",
+            "guest_os_type": "RedHat_64",
+
+            "disk_size": 50000,
+
+            "http_directory": "http",
+            "iso_urls": 
+            [
+                "iso/CentOS-7-x86_64-Minimal-1804.iso",
+                "http://mirror.unix-solutions.be/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso"
+            ],
+            "iso_checksum_type": "sha256",
+            "iso_checksum": "714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd",
+
+            "boot_wait": "10s",
+            "boot_command": 
+            [
+                "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+            ],
+            
+            "ssh_username": "user",
+            "ssh_password": "user",
+            "ssh_port": 22,
+            "ssh_wait_timeout": "10000s",
+            "shutdown_command": "echo 'user'|sudo -S /sbin/halt -h -p",
+
+            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+            "virtualbox_version_file": ".vbox_version",
+            
+            "vboxmanage": 
+            [
+                ["modifyvm", "{{.Name}}", "--memory", "2048"],
+                ["modifyvm", "{{.Name}}", "--cpus", "2"]
+            ]
+        }
+    ],
+
+    "provisioners": 
+    [
+        {
+            "type": "shell",
+            "only": ["centos-7-vmware-base", "centos-7-virtualbox-base"],
+            "inline": 
+            [
+                "sudo yum upgrade -y",
+                "sudo yum clean all"
+            ]
+        },
+        {
+            "type": "shell",
+            "only": ["centos-7-docker-base"],
+            "inline": 
+            [
+                "yum upgrade -y",
+                "yum clean all"
+            ]
+        }
+    ],
+    "post-processors": 
+    [
+        {
+            "type": "shell-local",
+            "only": ["centos-7-vmware-base"],
+            "inline": 
+            [
+                "mkdir -p output-centos-7-vmware-base/",
+                "ovftool ./vmware/centos-7-base.vmx ./output-centos-7-vmware-base/centos-7-base.ovf",
+                "rm -rf ./vmware"
+            ]
+        }
+    ]
+}
