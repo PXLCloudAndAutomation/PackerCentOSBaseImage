@@ -30,6 +30,7 @@ The user must be able to execute docker. Therefore, it's necessary to add the us
 sudo usermod -aG docker $USER
 ```
 
+To see the effects of this command log out and back in.
 
 ### Note for Fusion users
 The VMware commands aren't automatically added to the environment variable PATH. At some point Packer will execute OVF Tool command. Therefore, this command needs to be added to PATH. The following statement will add this.
