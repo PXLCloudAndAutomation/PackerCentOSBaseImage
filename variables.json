@@ -1,0 +1,42 @@
+{
+    "description": "CentOS 7 Template",
+    "name": "CentOS-7-base",
+
+    "iso_local": "iso/CentOS-7-x86_64-Minimal-1804.iso",
+    "iso_origin": "http://mirror.unix-solutions.be/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso",
+    "iso_checksum_type": "sha256",
+    "iso_checksum": "714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd",
+    "shutdown_command": "echo 'user'|sudo -S /sbin/halt -h -p",
+
+    "vmware_workstation_guest_os": "centos-64",
+    "vmware_tools_flavor": "linux",
+    "vmware_output_directory": "vmware",
+
+    "virtualbox_guest_os": "RedHat_64",
+    "virtualbox_guest_additions": "VBoxGuestAdditions_{{.Version}}.iso",
+    "virtualbox_version_file": ".vbox_version",
+
+
+    "docker_image": "centos:7",
+    "docker_export_path": "CentOS-7-base.tar",
+
+    "vsphere_guest_os": "centos7_64Guest",
+    "vsphere_network_card": "vmxnet3",
+    "vsphere_disk_controller_type": "pvscsi",
+    "vsphere_convert_to_template": "true",
+
+    "boot_order": "disk,cdrom",
+    "boot_wait": "10s",
+    "CoresPerSocket": "1",
+    "CPUs": "2",
+    "RAM": "2048",
+    "disk_size": "50000",
+    "network_card": "vmxnet3",
+
+    "http_directory": "http",
+
+    "ssh_username": "user",
+    "ssh_password": "user",
+    "ssh_port": "22",
+    "ssh_wait_timeout": "10000s"
+}

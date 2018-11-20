@@ -1,0 +1,13 @@
+{
+    "vcenter_server": "",
+    "username": "",
+    "password": "",
+    "datacenter": "",
+    "cluster": "",
+    "resource_pool": "",
+    "folder": "",
+    "host": "",
+    "vsphere_network": "VM Network",
+    "datastore": "",
+    "vsphere_iso_path": ""
+}
