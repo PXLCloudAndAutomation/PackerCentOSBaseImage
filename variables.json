@@ -16,7 +16,6 @@
     "virtualbox_guest_additions": "VBoxGuestAdditions_{{.Version}}.iso",
     "virtualbox_version_file": ".vbox_version",
 
-
     "docker_image": "centos:7",
     "docker_export_path": "CentOS-7-base.tar",
 

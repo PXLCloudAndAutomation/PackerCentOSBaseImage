@@ -1,97 +1,143 @@
 {
+    "description": "{{user `description`}}",
     "builders": 
     [
         {
-            "name": "centos-7-vmware-base",
+            "name": "vmware",
             "type": "vmware-iso",
             "headless": true,
             "vnc_disable_password": true,
             "keep_registered": "false",
 
-            "vm_name": "centos-7-base",
-            "guest_os_type": "centos-64",
-            "tools_upload_flavor": "linux",
+            "vm_name": "{{user `name`}}",
+            "guest_os_type": "{{user `vmware_workstation_guest_os`}}",
+            "tools_upload_flavor": "{{user `vmware_tools_flavor`}}",
 
             "disk_type_id": "0",
-            "disk_size": "50000",
+            "disk_size": "{{user `disk_size`}}",
 
-            "http_directory": "http",
+            "http_directory": "{{user `http_directory`}}",
             "iso_urls": 
             [
-                "iso/CentOS-7-x86_64-Minimal-1804.iso",
-                "http://mirror.unix-solutions.be/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso"
+                "{{user `iso_local`}}",
+                "{{user `iso_origin`}}"
             ],
-            "iso_checksum_type": "sha256",
-            "iso_checksum": "714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
 
-            "boot_wait": "10s",
+            "boot_wait": "{{user `boot_wait`}}",
             "boot_command": 
             [
                 "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
             ],
 
-            "ssh_username": "user",
-            "ssh_password": "user",
-            "ssh_port": 22,
-            "ssh_wait_timeout": "10000s",
-            "shutdown_command": "echo 'user'|sudo -S /sbin/halt -h -p",
+            "ssh_username": "{{user `ssh_username`}}",
+            "ssh_password": "{{user `ssh_password`}}",
+            "ssh_port": "{{user `ssh_port`}}",
+            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}",
+            "shutdown_command": "{{user `shutdown_comand`}}",
             
             "vmx_data": 
             {
                 "cpuid.coresPerSocket": "1",
-                "memsize": "2048",
-                "numvcpus": "2"
+                "numvcpus": "{{user `CPUs`}}",
+                "memsize": "{{user `RAM`}}"
             },
 
-            "output_directory": "vmware"
+            "output_directory": "{{user `vmware_output_directory`}}"
         },
         
           
         {
-            "name": "centos-7-docker-base",
+            "name": "docker",
             "type": "docker",
-            "image": "centos:7",
-            "export_path": "centos-7-docker-base.tar"
+            "image": "{{user `docker_image`}}",
+            "export_path": "{{user `docker_export_path`}}"
         },
 
         {
-            "name": "centos-7-virtualbox-base",
+            "name": "virtualbox",
             "type": "virtualbox-iso",
             "headless": true,
 
-            "vm_name": "centos-7-base",
-            "guest_os_type": "RedHat_64",
+            "vm_name": "{{user `name`}}",
+            "guest_os_type": "{{user `virtualbox_guest_os`}}",
 
-            "disk_size": 50000,
+            "disk_size": "{{user `disk_size`}}",
 
-            "http_directory": "http",
+            "http_directory": "{{user `http_directory`}}",
             "iso_urls": 
             [
-                "iso/CentOS-7-x86_64-Minimal-1804.iso",
-                "http://mirror.unix-solutions.be/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso"
+                "{{user `iso_local`}}",
+                "{{user `iso_origin`}}"
             ],
-            "iso_checksum_type": "sha256",
-            "iso_checksum": "714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
 
-            "boot_wait": "10s",
+            "boot_wait": "{{user `boot_wait`}}",
             "boot_command": 
             [
                 "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
             ],
             
-            "ssh_username": "user",
-            "ssh_password": "user",
-            "ssh_port": 22,
-            "ssh_wait_timeout": "10000s",
-            "shutdown_command": "echo 'user'|sudo -S /sbin/halt -h -p",
+            "ssh_username": "{{user `ssh_username`}}",
+            "ssh_password": "{{user `ssh_password`}}",
+            "ssh_port": "{{user `ssh_port`}}",
+            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}",
+            "shutdown_command": "{{user `shutdown_command`}}",
 
-            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
-            "virtualbox_version_file": ".vbox_version",
+            "guest_additions_path": "{{user `virtualbox_guest_additions`}}",
+            "virtualbox_version_file": "{{user `virtualbox_version_file`}}",
             
             "vboxmanage": 
             [
-                ["modifyvm", "{{.Name}}", "--memory", "2048"],
-                ["modifyvm", "{{.Name}}", "--cpus", "2"]
+                ["modifyvm", "{{.Name}}", "--memory", "{{user `RAM`}}"],
+                ["modifyvm", "{{.Name}}", "--cpus", "{{usesr `CPUs`}}"]
+            ]
+        },
+
+        {
+            "name": "vsphere",
+            "type": "vsphere-iso",
+            "vm_name":  "{{user `name`}}-template",
+            
+            "vcenter_server": "{{user `vcenter_server`}}",
+            "username": "{{user `username`}}",
+            "password": "{{user `password`}}",
+            "insecure_connection": true,
+            "datacenter": "{{user `datacenter`}}",
+            "cluster": "{{user `cluster`}}",
+            "resource_pool": "{{user `resource_pool`}}",
+            "folder": "{{user `folder`}}",
+            "host": "{{user `host`}}",
+            "datastore": "{{user `datastore`}}",
+            "boot_wait": "{{user `boot_wait`}}",
+            "boot_order": "{{user `boot_order`}}",
+            "iso_paths":
+            [
+                "[{{user `datastore`}}] {{user `vsphere_iso_path`}}"
+            ],
+
+            "disk_controller_type": "{{user `vsphere_disk_controller_type`}}",
+            "disk_size": "{{user `disk_size`}}",
+            "disk_thin_provisioned": true,
+            "convert_to_template": "{{user `vsphere_convert_to_template`}}",
+            "CPUs": "{{user `CPUs`}}",
+            "RAM": "{{user `RAM`}}",
+            "RAM_reserve_all": true,
+            "network": "{{user `vsphere_network`}}",
+            "network_card": "{{user `vsphere_network_card`}}",
+            "guest_os_type": "{{user `vsphere_guest_os`}}",
+            "ssh_username": "{{user `ssh_username`}}",
+            "ssh_password": "{{user `ssh_password`}}",
+            "boot_wait": "{{user `boot_wait`}}",
+            "boot_command": 
+            [
+                "<tab> text ks=hd:fd0:/ks.cfg<enter><wait>"
+            ],
+            "floppy_files": 
+            [
+                "http/ks.cfg"
             ]
         }
     ],
@@ -100,7 +146,7 @@
     [
         {
             "type": "shell",
-            "only": ["centos-7-vmware-base", "centos-7-virtualbox-base"],
+            "only": ["vmware", "virtualbox"],
             "inline": 
             [
                 "sudo yum upgrade -y",
@@ -109,7 +155,7 @@
         },
         {
             "type": "shell",
-            "only": ["centos-7-docker-base"],
+            "only": ["docker"],
             "inline": 
             [
                 "yum upgrade -y",
@@ -121,12 +167,11 @@
     [
         {
             "type": "shell-local",
-            "only": ["centos-7-vmware-base"],
+            "only": ["vmware"],
             "inline": 
             [
-                "mkdir -p output-centos-7-vmware-base/",
-                "ovftool ./vmware/centos-7-base.vmx ./output-centos-7-vmware-base/centos-7-base.ovf",
-                "rm -rf ./vmware"
+                "mkdir -p {{user `ovftool_output_directory`}}",
+                "ovftool ./{{user `vmware_output_directory`}}/{{user `name`}}.vmx ./{{user `ovftool_output_directory`}}/{{user `name`}}.ovf"
             ]
         }
     ]
