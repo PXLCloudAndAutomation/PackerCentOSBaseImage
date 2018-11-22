@@ -117,6 +117,7 @@
             [
                 "[{{user `datastore`}}] {{user `vsphere_iso_path`}}"
             ],
+            "cdrom_type": "sata",
 
             "disk_controller_type": "{{user `vsphere_disk_controller_type`}}",
             "disk_size": "{{user `disk_size`}}",
