@@ -92,7 +92,7 @@
             "vboxmanage": 
             [
                 ["modifyvm", "{{.Name}}", "--memory", "{{user `RAM`}}"],
-                ["modifyvm", "{{.Name}}", "--cpus", "{{usesr `CPUs`}}"]
+                ["modifyvm", "{{.Name}}", "--cpus", "{{user `CPUs`}}"]
             ]
         },
 
@@ -140,6 +140,19 @@
             [
                 "http/ks.cfg"
             ]
+        },
+        
+        {
+            "name": "aws",
+            "type": "amazon-ebs",
+            "region": "us-east-1",
+            "source_ami": "ami-01d5b8c6e4958a724",
+            "instance_type": "t2.micro",
+            "ssh_username": "centos",
+            "ami_name": "packer-example {{timestamp}}",
+            "tags": {
+                "Name" : "{{user `name`}}-template"
+            }
         }
     ],
 
@@ -161,6 +174,16 @@
             [
                 "yum upgrade -y",
                 "yum clean all"
+            ]
+        },
+        {
+            "type": "shell",
+            "only": ["aws"],
+            "inline": 
+            [
+                "sudo yum install -y deltarpm", 
+                "sudo yum upgrade -y",
+                "sudo yum clean all"
             ]
         }
     ],
