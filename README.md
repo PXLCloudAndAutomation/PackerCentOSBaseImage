@@ -1,7 +1,7 @@
 # Packer CentOS 7 base image
 A complete example how to build a clean and updated CentOS 7 image using Packer from HashiCorp. 
 
-There are five builders used to create an image: VMWare Workstation, VirtualBox, VMWare vSphere, Docker and AWS. The first two use an ISO to install the operating system and will create a VMDK and an OVF. The vSphere builder expects an ISO file on an datastore and creates a templte. The Docker builder uses the official CentOS 7 docker image and will produce a tar file. The last builder, the one for AWS, also uses an official CentOS image to create an own AMI.
+There are five builders used to create an image: VMWare Workstation, VirtualBox, VMWare vSphere, Docker and AWS. The first two use an ISO to install the operating system and will create a VMDK and an OVF. The vSphere builder expects an ISO file on a datastore and creates a template. The Docker builder uses the official CentOS 7 docker image and will produce a tar file. The last builder, the one for AWS, also uses an official CentOS image to create an own AMI.
 
 ## Prerequisites
 
@@ -10,7 +10,14 @@ There are five builders used to create an image: VMWare Workstation, VirtualBox,
  * VirtualBox (version 5.2.22)
  * Docker (version 18.06.1-ce)
  * Login credentials for vSphere (versions 6.5 or 6.7)
+ * [Packer plugin for remote builds on VMware vSphere](https://github.com/jetbrains-infra/packer-builder-vsphere)
  * Amazon AWS credentials (located in `~/.aws/credentials`)
+
+## Install Packer and the plugin
+Download the Packer binary  and extract it to `~/bin`. Do not forget to add this directory to the `PATH` variable.
+
+### Packer plugin for remote builds on VMware vSphere
+Download the binary from the site and place it in the same directory as `packer`. **Note**: It might be necessary to rename the binary file after extracting.
 
 ## Run Packer
 The first command below will execute Packer and create, if all goes well, the different versions of the image. A subdirectory called `output-centos-7-virtualbox-base` will contain the OVF and VMDK made by VirtualBox. Inside the `output-centos-7-vmware-base` directory are the versions made by VMware. The tar file from docker will be created in the working directory. 
