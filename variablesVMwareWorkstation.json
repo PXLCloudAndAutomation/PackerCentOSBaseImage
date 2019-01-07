@@ -12,18 +12,6 @@
     "vmware_tools_flavor": "linux",
     "vmware_output_directory": "vmware",
 
-    "virtualbox_guest_os": "RedHat_64",
-    "virtualbox_guest_additions": "VBoxGuestAdditions_{{.Version}}.iso",
-    "virtualbox_version_file": ".vbox_version",
-
-    "docker_image": "centos:7",
-    "docker_export_path": "CentOS-7-base.tar",
-
-    "vsphere_guest_os": "centos7_64Guest",
-    "vsphere_network_card": "vmxnet3",
-    "vsphere_disk_controller_type": "pvscsi",
-    "vsphere_convert_to_template": "false",
-
     "boot_order": "disk,cdrom",
     "boot_wait": "10s",
     "CoresPerSocket": "1",
