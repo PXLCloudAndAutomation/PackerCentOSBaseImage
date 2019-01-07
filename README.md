@@ -22,20 +22,6 @@ Download the binary from the site and place it in the same directory as `packer`
 ## Run Packer
 The first command below will execute Packer and create, if all goes well, the different versions of the image. A subdirectory called `output-centos-7-virtualbox-base` will contain the OVF and VMDK made by VirtualBox. Inside the `output-centos-7-vmware-base` directory are the versions made by VMware. The tar file from docker will be created in the working directory. 
 
-Build everything (This will take some time.): 
-
-```bash
-$ packer build   -var-file=variables.json linux-base.json
-aws output will be in this color.
-docker output will be in this color.
-virtualbox output will be in this color.
-vmware output will be in this color.
-vsphere output will be in this color.
-
- . . . 
-
-```
-
 Thanks to the `-only` argument it's possible to specify the needed builders. For example, to only execute the VirtualBox builder use the following command:
 
 ```bash
